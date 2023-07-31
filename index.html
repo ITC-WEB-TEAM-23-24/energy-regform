@@ -1,19 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <form 
-    method="POST" 
-    action="https://script.google.com/macros/s/AKfycbzPbZQuhXCd3FkOSzgqn5DZi6oxa_Ql3BeAsPIZKaurWFqLDUG9aCARdFkjjD6xR78fyA/exec">
-    <input name="Email" type="email" placeholder="Email" required>
-    <input name="Name" type="text" placeholder="Name" required>
-    <input name="Salary" type="text" placeholder="Salary" required>
-    <input name="Hobby" type="text" placeholder="Hobby" required>
-    <button type="submit">Send</button>
-  </form>
-</body>
+    <style>
+      body {
+        background-image: url(./bg.jpg);
+        font-family: "Arial", sans-serif;
+        /* line-height: 1.6; */
+        margin: 0;
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f2f2f2;
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+
+      form {
+        width: 25%;
+        height: auto;
+        padding: 30px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      input,
+      select {
+        position: relative;
+        display: block;
+        width: 100%;
+        padding-block: 12px;
+        padding-inline: 4px;
+        margin-bottom: 30px;
+        border: 2px solid #769145;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #444;
+        background-color: #f8f8f8;
+      }
+
+      .btn {
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.2s;
+        display: flex;
+        margin: auto;
+      }
+
+      .btn:hover {
+        background-color: #df762c;
+      }
+
+      input::placeholder {
+        color: #aaa;
+      }
+
+      select {
+        padding: 12px;
+      }
+
+      #card-errors {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+
+      /* Add some funky colors */
+      input:focus,
+      select:focus {
+        border-color: #e67e22;
+        box-shadow: 0 0 5px rgba(230, 126, 34, 0.5);
+      }
+
+      .btn {
+        background-color: #f7e2c1;
+        color: black;
+      }
+
+      .btn:hover {
+        background-color: #afd8f4;
+      }
+
+      select {
+        border-color: #769145;
+        background-color: #ecf0f1;
+      }
+      .img {
+        height: auto;
+        width: 30%;
+        margin-inline: auto;
+        display: flex;
+      }
+
+      /* @media screen and (max-width: 3000px) {
+        .img {
+          width: 30%;
+        }
+      } */
+      @media screen and (max-width: 1000px) {
+        .img {
+          width: 300px;
+          height: auto;
+        }
+        form {
+          width: 200px;
+          height: 400px;
+        }
+      }
+    </style>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <img class="img" src="./img.jpg" alt="Energy Swaraj poster" />
+    <form
+      id="payment-form"
+      method="POST"
+      action="https://script.google.com/macros/s/AKfycbzPbZQuhXCd3FkOSzgqn5DZi6oxa_Ql3BeAsPIZKaurWFqLDUG9aCARdFkjjD6xR78fyA/exec"
+    >
+      <input name="Name" type="text" placeholder="Name" required />
+      <input name="Email" type="email" placeholder="Email" required />
+      <input
+        name="Contact_number"
+        type="tel"
+        placeholder="Contact Number"
+        required
+      />
+      <select name="Occupation" id="occupation" required>
+        <option value="" disabled selected>Select your occupation</option>
+        <option value="Professor">Professor</option>
+        <option value="Student">Student</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="card-errors" role="alert"></div>
+
+      <button class="btn" type="submit">Submit</button>
+    </form>
+  </body>
 </html>
