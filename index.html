@@ -119,6 +119,7 @@
       }
     </style>
     <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="icon" href="./img.jpg" />
   </head>
   <body>
@@ -144,7 +145,60 @@
       </select>
       <div id="card-errors" role="alert"></div>
 
-      <button class="btn" type="submit">Submit</button>
+      <!-- <button class="btn" type="submit">Submit</button> -->
+      <button class="btn" type="button" id="razorpay-button">
+        Submit and proceed to payment
+      </button>
     </form>
+    <!-- razorpay payment integration -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const razorpayButton = document.getElementById("razorpay-button");
+
+        razorpayButton.addEventListener("click", function () {
+          // Get form inputs
+          const nameInput = document.querySelector('input[name="Name"]');
+          const emailInput = document.querySelector('input[name="Email"]');
+          const contactInput = document.querySelector(
+            'input[name="Contact_number"]'
+          );
+          const occupationInput = document.querySelector(
+            'select[name="Occupation"]'
+          );
+
+          // Check if all fields are filled
+          if (
+            nameInput.value.trim() === "" ||
+            emailInput.value.trim() === "" ||
+            contactInput.value.trim() === "" ||
+            occupationInput.value === ""
+          ) {
+            alert("Please fill in all the required fields.");
+            return; // Stop execution
+          }
+
+          const options = {
+            key: "rzp_test_m0SdYW69BrE0r9",
+            key_secret: "ive_dBEOB",
+            amount: 100,
+            currency: "INR",
+            name: "Energy Swaraj",
+            description: "Event Registration",
+            handler: function (response) {
+              console.log(response);
+              document.getElementById("payment-form").submit();
+            },
+            prefill: {
+              name: nameInput.value,
+              email: emailInput.value,
+              contact: contactInput.value,
+            },
+          };
+
+          const rzp = new Razorpay(options);
+          rzp.open();
+        });
+      });
+    </script>
   </body>
 </html>
