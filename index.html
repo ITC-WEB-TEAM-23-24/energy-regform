@@ -154,6 +154,7 @@
         }
       }
     </style>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <link rel="icon" href="./img.jpg" />
   </head>
@@ -199,7 +200,7 @@
     const popupMessage = document.getElementById("popup-message");
     const closeButton = document.getElementById("close-button");
 
-// ... (your existing JavaScript code) ...
+
 
 form.addEventListener("submit", async function (event) {
   event.preventDefault(); // Prevent default form submission
@@ -222,6 +223,21 @@ form.addEventListener("submit", async function (event) {
         const name = formData.get("Name");
         const email = formData.get("Email");
         const contactNumber = formData.get("Contact_number");
+
+
+
+        // Sending an email
+        Email.send({
+          SecureToken : "0a914419-98e2-478f-8982-95700d04c16d", // setup smtp server and then add the security token here 
+          To: email, 
+          From: "ishanpatni7777@gmail.com",  //Add email here from which you wish to send mail (this email should be varified https://smtpjs.com/ by setting up a smtp server)
+          Subject: "Registration Confirmation",
+          Body: `Thank you for registering for the Energy-Swaraj event. Your registration code is: ES_${jsonResponse.row}`
+        }).then(message => {
+          console.log(message);
+          // You can also show a success message to the user here
+        });
+
 
         // Populate the modal content with user data
         const popupContent = document.querySelector(".modal-content"); // Get the modal content element
