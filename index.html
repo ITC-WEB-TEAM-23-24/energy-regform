@@ -228,9 +228,9 @@ form.addEventListener("submit", async function (event) {
 
         // Sending an email
         Email.send({
-          SecureToken : "0a914419-98e2-478f-8982-95700d04c16d", // setup smtp server and then add the security token here 
+          SecureToken : "09b2decb-9fd2-488a-80f4-1fafde751afe", // setup smtp server and then add the security token here 
           To: email, 
-          From: "ishanpatni7777@gmail.com",  //Add email here from which you wish to send mail (this email should be varified https://smtpjs.com/ by setting up a smtp server)
+          From: "prakhar.agra5@gmail.com",  //Add email here from which you wish to send mail (this email should be varified https://smtpjs.com/ by setting up a smtp server)
           Subject: "Registration Confirmation",
           Body: `Thank you for registering for the Energy-Swaraj event. Your registration code is: ES_${jsonResponse.row}`
         }).then(message => {
