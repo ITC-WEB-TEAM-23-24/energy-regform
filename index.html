@@ -150,7 +150,7 @@
         }
         form {
           width: 250px;
-          height: 400px;
+          height: 500px;
         }
       }
     </style>
@@ -173,10 +173,18 @@
         placeholder="Contact Number"
         required
       />
+      <input name="Organization/Institution" type="text" placeholder="Organization/Institution" required />
       <select name="Occupation" id="occupation" required>
         <option value="" disabled selected>Select your occupation</option>
         <option value="Professor">Professor</option>
         <option value="Student">Student</option>
+        <option value="Other">Other</option>
+      </select>
+      <select name="How did you hear about this event?" id="occupation" required>
+        <option value="" disabled selected>How did you hear about this event?</option>
+        <option value="Professor">Social Media</option>
+        <option value="Student">Website</option>
+        <option value="Other">Word of mouth</option>
         <option value="Other">Other</option>
       </select>
       <div id="card-errors" role="alert"></div>
@@ -231,8 +239,37 @@ form.addEventListener("submit", async function (event) {
           SecureToken : "0a914419-98e2-478f-8982-95700d04c16d", // setup smtp server and then add the security token here 
           To: email, 
           From: "ishanpatni7777@gmail.com",  //Add email here from which you wish to send mail (this email should be varified https://smtpjs.com/ by setting up a smtp server)
-          Subject: "Registration Confirmation",
-          Body: `Thank you for registering for the Energy-Swaraj event. Your registration code is: ES_${jsonResponse.row}`
+          Subject: "Confirmation and Important Details for Energy Swaraj event",
+          Body: `Dear ${name},<br><br>
+    Thank you for registering for the event! We are excited to have you join us. Here are the important details you need to know:<br><br>
+    Your unique registration code is: ES_${jsonResponse.row}<br><br>
+    Event Details:<br>
+    - Event Name: 1000 days 1000 hopes<br>
+    - Date: 22 August 2023<br>
+    - Time: 5:00 PM - 8:00 PM<br>
+    - Location: Convocation Hall, IIT Bombay Campus (<a href="https://goo.gl/maps/thrXh1Wsaq9BZspR6">Google Maps</a>)<br><br>
+    Arrival Time:<br>
+    Please plan to arrive at the venue at least 20 minutes prior to the event start time. This will ensure a smooth check-in process and give you time to get settled before the event begins.<br><br>
+    Parking:<br>
+    We strongly advise arriving at the location via public transport or carpooling, or arriving via a taxi to avoid parking hassles.<br><br>
+    Prohibited Items:<br>
+    1. Alcohol: Consumption of alcoholic beverages is strictly prohibited on the premises.<br>
+    2. Firearms: Possession of firearms or any other weapons is not allowed.<br>
+    3. Electric Vapes and Cigarettes: For the comfort of all attendees, please refrain from using electric vapes and cigarettes within the venue.<br>
+    4. Lighters: For safety reasons, please do not bring lighters onto the premises.<br><br>
+    Water Bottles:<br>
+    We encourage you to bring your own refillable water bottle. Hydration is important, and we want to make sure you stay refreshed throughout the event.<br><br>
+    Important Reminders:<br>
+    - Bring a valid photo ID for check-in.<br>
+    - Please have your registration confirmation code and email handy, either in print or on your mobile device.<br>
+    - Stay updated with any event-related announcements through our official <a href="https://www.instagram.com/energy_swaraj/">Instagram</a> handle.<br><br>
+    Contact Information:<br>
+    If you have any questions or require assistance, feel free to contact our event team at [Event Contact Email].<br><br>
+    We look forward to your participation and hope you have an enriching experience at the event. See you soon!<br><br>
+    Best regards,<br>
+    [Your Name]<br>
+    [Your Title]<br>
+    [Event Organizer/Organization Name]`
         }).then(message => {
           console.log(message);
           // You can also show a success message to the user here
@@ -246,8 +283,9 @@ form.addEventListener("submit", async function (event) {
           <p>Name: ${name}</p>
           <p>Email: ${email}</p>
           <p>Contact Number: ${contactNumber}</p>
-          <p>Unique registration code: ES_${jsonResponse.row}</p>
-          <p>Please remember this code as it will be required for attending the event**</p>
+          <p style="background-color: lightgrey; padding: 10px;">Your unique registration code: ES_${jsonResponse.row}</p>
+          <p>Please remember this code as it will be required for attending the event.Kindly look for mail sent to you on your registered email id (do check spam folder as well). </p>
+          <p>Mail not recieved? Don't worry, just remember the unique registration code.</p>
         `;
 
         popupModal.style.display = "block"; // Show the popup modal
