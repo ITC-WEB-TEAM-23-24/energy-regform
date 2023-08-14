@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
+      /* Existing styles ... */
+
+/* Modal Popup Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 70%;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+}
+
+/* ... (rest of your existing styles) ... */
+
       body {
         background-image: url(./bg.jpg);
         font-family: "Arial", sans-serif;
@@ -119,7 +155,6 @@
       }
     </style>
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="icon" href="./img.jpg" />
   </head>
   <body>
@@ -145,60 +180,83 @@
       </select>
       <div id="card-errors" role="alert"></div>
 
-      <!-- <button class="btn" type="submit">Submit</button> -->
-      <button class="btn" type="button" id="razorpay-button">
-        Submit and proceed to payment
-      </button>
+      <button class="btn" type="submit">Submit</button>
+      <!-- <button class="btn" type="button" id="razorpay-button">Submit</button> -->
     </form>
-    <!-- razorpay payment integration -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const razorpayButton = document.getElementById("razorpay-button");
 
-        razorpayButton.addEventListener("click", function () {
-          // Get form inputs
-          const nameInput = document.querySelector('input[name="Name"]');
-          const emailInput = document.querySelector('input[name="Email"]');
-          const contactInput = document.querySelector(
-            'input[name="Contact_number"]'
-          );
-          const occupationInput = document.querySelector(
-            'select[name="Occupation"]'
-          );
+<!-- for popup after form submission -->
+<div class="modal" id="popup-modal">
+  <div class="modal-content">
+    <span class="close-button" id="close-button">&times;</span>
+    <p id="popup-message"></p>
+  </div>
+</div>
 
-          // Check if all fields are filled
-          if (
-            nameInput.value.trim() === "" ||
-            emailInput.value.trim() === "" ||
-            contactInput.value.trim() === "" ||
-            occupationInput.value === ""
-          ) {
-            alert("Please fill in all the required fields.");
-            return; // Stop execution
-          }
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("payment-form");
+    const popupModal = document.getElementById("popup-modal");
+    const popupMessage = document.getElementById("popup-message");
+    const closeButton = document.getElementById("close-button");
 
-          const options = {
-            key: "rzp_test_m0SdYW69BrE0r9",
-            key_secret: "ive_dBEOB",
-            amount: 100,
-            currency: "INR",
-            name: "Energy Swaraj",
-            description: "Event Registration",
-            handler: function (response) {
-              console.log(response);
-              document.getElementById("payment-form").submit();
-            },
-            prefill: {
-              name: nameInput.value,
-              email: emailInput.value,
-              contact: contactInput.value,
-            },
-          };
+// ... (your existing JavaScript code) ...
 
-          const rzp = new Razorpay(options);
-          rzp.open();
-        });
-      });
-    </script>
-  </body>
+form.addEventListener("submit", async function (event) {
+  event.preventDefault(); // Prevent default form submission
+
+  const formData = new FormData(form);
+  const submitButton = form.querySelector(".btn");
+  submitButton.disabled = true; // Disable the submit button during submission
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      if (jsonResponse.result === "success" && jsonResponse.row) {
+
+        // Get user data from the form fields
+        const name = formData.get("Name");
+        const email = formData.get("Email");
+        const contactNumber = formData.get("Contact_number");
+
+        // Populate the modal content with user data
+        const popupContent = document.querySelector(".modal-content"); // Get the modal content element
+        popupContent.innerHTML = `
+         <p> Form submitted successfully!</p>
+          <p>Name: ${name}</p>
+          <p>Email: ${email}</p>
+          <p>Contact Number: ${contactNumber}</p>
+          <p>Unique registration code: ES_${jsonResponse.row}</p>
+          <p>Please remember this code as it will be required for attending the event**</p>
+        `;
+
+        popupModal.style.display = "block"; // Show the popup modal
+      } else {
+        popupMessage.textContent = "Form submission failed.";
+        popupModal.style.display = "block";
+      }
+    } else {
+      popupMessage.textContent = "Form submission failed.";
+      popupModal.style.display = "block";
+    }
+  } catch (error) {
+    popupMessage.textContent = "An error occurred during form submission.";
+    popupModal.style.display = "block";
+  } finally {
+    submitButton.disabled = true; // Disable the submit button
+  }
+});
+
+
+    closeButton.addEventListener("click", function () {
+      popupModal.style.display = "none"; // Close the popup modal
+    });
+  });
+</script>
+
+
 </html>
